@@ -27,7 +27,7 @@ body {
     /*background-color: #70c0cc;*/
     border: 2px solid #a1a7be;
     border-radius: 5px;
-    margin: 20px;
+    margin: 3px;
     margin-top: 5px;
     margin-bottom: 5px;
     align-content: center;
@@ -101,8 +101,8 @@ body {
 }
 
 .search-image-button, #fake-search-button {
-    margin-left: 30%;
-    margin-right: 30%;
+    margin-left: 10%;
+    margin-right: 10%;
     margin-top: 6px;
     margin-bottom: 4px;
 
@@ -112,12 +112,20 @@ body {
     display: none;
 }
 
+@media (max-width: 366px) {
+    .search-image-button {
+        margin-left: 10%;
+        margin-right: 10%;
+        display: none;
+    }
+}
+
 
 #best-guess {
     font-size: xx-large;
 }
 
-#links {
+#links, #descriptions {
     word-break: break-all;
 }
 
