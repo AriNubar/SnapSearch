@@ -126,7 +126,7 @@ body {
 }
 
 #links, #descriptions {
-    word-break: break-all;
+    word-break: break-word;
 }
 
 #photo {
