@@ -23,8 +23,6 @@ body {
 }
 
 .first-box, .second-box {
-    /*width:400px;*/
-    /*background-color: #70c0cc;*/
     border: 2px solid #a1a7be;
     border-radius: 5px;
     margin: 3px;
@@ -32,7 +30,6 @@ body {
     margin-bottom: 5px;
     align-content: center;
 }
-
 
 @media (min-width: 768px) and (max-width: 992px) {
     #load-animation {
@@ -69,7 +66,6 @@ body {
     }
 }
 
-
 #video, #photo {
     alignment: center;
     border: 1px solid transparent;
@@ -82,7 +78,6 @@ body {
 
 .container {
     width: 100%;
-    /* padding-right: 15px; */
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
@@ -92,12 +87,6 @@ body {
 .booth-capture-button {
     margin-left: 33%;
     margin-bottom: 4px;
-    /*margin: 10px 0;*/
-    /*padding: 10px 20px;*/
-    /*background-color: cornflowerblue;*/
-    /*color: #fff;*/
-    /*text-align: center;*/
-    /*text-decoration: none;*/
 }
 
 .search-image-button, #fake-search-button {

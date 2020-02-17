@@ -9,9 +9,7 @@ function clearBox(elementID) {
     document.getElementById(elementID).innerHTML = "";
 }
 
-
 (function () {
-
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -50,16 +48,13 @@ function clearBox(elementID) {
         audio: false
     }, function (stream) {
         video.srcObject = stream;
-        //video.src = vendorUrl.createObjectURL(stream);
         video.play();
     }, function (error) {
-        //error code
+        alert("Couldn't activate camera... Make sure you allow the access to camera.")
     });
 
     document.getElementById('capture').addEventListener('click', function () {
             fakeSearchButton.style.display = "none";
-
-
             var MAX_WIDTH = 300;
             var MAX_HEIGHT = 225;
             var width = video.videoWidth;
@@ -72,7 +67,7 @@ function clearBox(elementID) {
                 }
                 canvas.width = width;
                 canvas.height = height;
-                context.drawImage(video, 0, 0,  canvas.width, canvas.height);
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
             } else {
                 if (height > MAX_HEIGHT) {
                     width *= MAX_HEIGHT / height;
@@ -85,22 +80,21 @@ function clearBox(elementID) {
             }
 
             var imgsrc = canvas.toDataURL('image/png');
-
             photo.setAttribute("width", canvas.width);
             photo.setAttribute("height", canvas.height);
             photo.setAttribute('src', imgsrc);
             $.ajax({
                 type: "POST",
                 url: "/save",
-                data: imgsrc
+                data: imgsrc,
+                error: function (msg) {
+                    alert("Something went wrong while connecting to the server, please check your internet connection and try again!");
+                }
 
             }).done(function () {
                 console.log('sent');
             });
-
-
             photo.style.display = "block";
-
             searchButton.style.display = "block";
         },
     );
@@ -112,6 +106,14 @@ function clearBox(elementID) {
             type: "GET",
             url: "https://192.168.0.101:5000/search_image",
             dataType: "json",
+            error: function (msg) {
+                if (msg.status == 500) {
+                    alert("Something went wrong in the server, please contact server admin.")
+                } else {
+                    alert("Something went wrong while connecting to the server, please check your internet connection and try again!");
+                }
+                loaderWrapper.style.display = "none";
+            },
             success: function (data) {
                 clearBox('best-guess');
                 clearBox('descriptions');
@@ -138,22 +140,12 @@ function clearBox(elementID) {
                         var result = "<p class='text-center'><b>" + key + ":</b></p>" + value;
                         links.append(result);
                     }
-
                 });
-
             }
-
         }).done(function () {
             loaderWrapper.style.display = "none"
         });
-
-
     });
-
 
 })();
 
-function printOut() {
-    console.log(JSON.stringify(info))
-    $('body').append(info);
-}

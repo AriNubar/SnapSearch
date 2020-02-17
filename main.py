@@ -28,10 +28,6 @@ def home():
     return render_template('index.html')
 
 
-
-
-
-
 @app.route('/save', methods=['GET','POST'])
 def save_base64_file():
     """
@@ -66,25 +62,10 @@ def search_image():
         }
 
     res = requests.post(url, payload)
-    # res_json = {'data': {'id': '31kCmfW', 'url_viewer': 'https://ibb.co/31kCmfW',
-    #                      'url': 'https://i.ibb.co/sjtV95Q/mario.png',
-    #                      'display_url': 'https://i.ibb.co/sjtV95Q/mario.png', 'title': 'mario',
-    #                      'time': '1576404031',
-    #                      'image': {'filename': 'mario.png', 'name': 'mario', 'mime': 'image/png',
-    #                                'extension': 'png', 'url': 'https://i.ibb.co/sjtV95Q/mario.png',
-    #                                'size': 233646},
-    #                      'thumb': {'filename': 'mario.png', 'name': 'mario', 'mime': 'image/png',
-    #                                'extension': 'png', 'url': 'https://i.ibb.co/sjtV95Q/mario.png',
-    #                                'size': '57122'},
-    #                      'delete_url': 'https://ibb.co/99wG6Sg/f3108ace81f7c82abdf6043fd1df136d'}, 'success': True,
-    #             'status': 200}
     res_json = res.json()
 
-    # print(res.json())
-    # print(url_for('static', filename='imageToSave.png'))
     url = "https://192.168.0.101:5000/search"
 
-    # "image_url": url_for('static', filename='imageToSave.png')
     data = {
         "image_url": res_json['data']['url'],
         "resized_images": False,  # Or True
@@ -173,14 +154,7 @@ def parseResults(code, resized=False):
     for desc in soup.findAll('span', attrs={'class':'st'}):
         results['descriptions'].append(desc.get_text())
 
-    # for title in soup.findAll('h3', attrs={'class':'r'}):
-    #     results['titles'].append(title.get_text())
 
-    # for similar_image in soup.findAll('div', attrs={'rg_meta'}):
-    #     tmp = json.loads(similar_image.get_text())
-    #     img_url = tmp['ou']
-    #     results['similar_images'].append(img_url)
-    #
     for best_guess in soup.findAll('a', attrs={'class':'fKDtNb'}):
       results['best_guess'] = best_guess.get_text()
 
