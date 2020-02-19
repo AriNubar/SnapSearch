@@ -4,12 +4,15 @@ var descriptions = $('#descriptions');
 var links = $('#links');
 var loaderWrapper = document.getElementById("loader-wrapper");
 var fakeSearchButton = document.getElementById("fake-search-button");
+var faceEnvironment = true;
+var videoStream = null;
 
 function clearBox(elementID) {
     document.getElementById(elementID).innerHTML = "";
 }
 
 (function () {
+    alert("This website uses 3rd party tools to upload the image to Google Image Search. The uploaded images are then deleted by the admin. If you are agreeing to this please click OK. If not please close this window.");
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -34,24 +37,27 @@ function clearBox(elementID) {
         navigator.msGetUserMedia;
 
     navigator.getMedia({
-        video: {
-            width: {
-                min: 300,
-                max: 1920,
+            video: {
+                width: {
+                    min: 300,
+                    max: 1920,
+                },
+                height: {
+                    min: 225,
+                    max: 1080
+                },
+                facingMode: faceEnvironment ? "environment" : "user"
             },
-            height: {
-                min: 225,
-                max: 1080
-            },
-            facingMode: "user"
+            audio: false
+        }, function(stream){
+            videoStream = stream;
+            video.srcObject = stream;
+            video.play();
         },
-        audio: false
-    }, function (stream) {
-        video.srcObject = stream;
-        video.play();
-    }, function (error) {
-        alert("Couldn't activate camera... Make sure you allow the access to camera.")
-    });
+
+        function (error) {
+            alert("Couldn't activate camera... Make sure you allow the access to camera.")
+        });
 
     document.getElementById('capture').addEventListener('click', function () {
             fakeSearchButton.style.display = "none";
@@ -120,7 +126,7 @@ function clearBox(elementID) {
                 clearBox('links');
                 $.each(data, function (key, value) {
                     if (key == "best_guess") {
-                        key = "Best Guess";
+                        key = "Guess";
 
                         var result = "<p><b>" + key + ":</b> " + value + "<hr></p>"
                         bestGuess.append(result);
@@ -147,5 +153,60 @@ function clearBox(elementID) {
         });
     });
 
+    $("#video").on("doubletap", function () {
+        faceEnvironment = !faceEnvironment;
+        console.log(faceEnvironment);
+        video.pause();
+        videoStream.getTracks().forEach(track => track.stop());
+        if(faceEnvironment) { // back camera
+            navigator.getMedia({
+            video: {
+                width: {
+                    min: 300,
+                    max: 1920,
+                },
+                height: {
+                    min: 225,
+                    max: 1080
+                },
+                facingMode: "environment"
+            },
+            audio: false
+        }, function(stream) {
+            videoStream = stream;
+            video.srcObject = stream;
+            video.play();
+        },
+
+        function (error) {
+            console.log(error);
+            alert("Couldn't activate camera... Make sure you allow the access to camera.")
+        });
+        } else { // front camera
+            navigator.getMedia({
+            video: {
+                width: {
+                    min: 300,
+                    max: 1920,
+                },
+                height: {
+                    min: 225,
+                    max: 1080
+                },
+                facingMode: "user"
+            },
+            audio: false
+        }, function(stream) {
+            videoStream = stream;
+            video.srcObject = stream;
+            video.play();
+        },
+
+        function (error) {
+            console.log(error);
+            alert("Couldn't activate camera... Make sure you allow the access to camera.")
+        });
+        }
+    })
 })();
 

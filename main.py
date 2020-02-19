@@ -17,11 +17,12 @@ if python3:
     import certifi
 
 
-
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 IMAGE_FILEPATH = os.path.join(APP_ROOT, 'static/imageToSave.png')
-host = '192.168.0.101'
+
+#host = '192.168.10.11' #TECO 192.168.10.11 - home 192.168.0.101
+host = '192.168.0.101' #TECO 192.168.10.11 - home 192.168.0.101
 @app.route("/")
 @app.route("/home")
 def home():
@@ -31,8 +32,7 @@ def home():
 @app.route('/save', methods=['GET','POST'])
 def save_base64_file():
     """
-        Upload image with base64 format and get car make model and year
-        response
+        Save image with base64 format
     """
 
     data = request.get_data()
@@ -63,6 +63,8 @@ def search_image():
 
     res = requests.post(url, payload)
     res_json = res.json()
+    delete_url = res_json["data"]["delete_url"]
+
 
     url = "https://192.168.0.101:5000/search"
 
